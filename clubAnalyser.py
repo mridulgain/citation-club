@@ -48,3 +48,10 @@ for i in range(len(club)):
     for j in range(len(club)):
         print(len(ref[i][j]), end=" | ")
     print("\n")
+# total citation from journal
+n_cit = [0] * len(club)
+for i in range(len(club)):
+    i_papers = authors[club[i]]['papers']
+    for p in i_papers:
+        n_cit[i] += len(papers[p]['cited_by'])
+print(n_cit)
