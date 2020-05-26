@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import rawDataParser as rdp
 
-club = [2106866729, 2163830057, 2593217274, 2110542169, 2639260782, 2299437103]
+club = [2608506984, 2163830057, 2106866729, 2639260782, 2299437103, 2079150322, 2110542169, 2593217274, 2907377662]
 print(club)
 papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
 
@@ -54,4 +54,14 @@ for i in range(len(club)):
     i_papers = authors[club[i]]['papers']
     for p in i_papers:
         n_cit[i] += len(papers[p]['cited_by'])
-print(n_cit)
+print("Total citation from journal:---------------------------------")
+for x in zip(club, n_cit):
+    print(x)
+# totatl citation from club
+n_cit_club = [0] * len(club)
+for i in range(len(club)):
+    for j in range(len(club)):
+        n_cit_club[i] += len(ref[j][i])
+print("Totalo citation from club:-----------------------------------")
+for x in zip(club, n_cit_club):
+    print(x)
