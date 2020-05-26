@@ -3,7 +3,7 @@ import rawDataParser as rdp
 
 club = [2106866729, 2163830057, 2593217274, 2110542169, 2639260782, 2299437103]
 print(club)
-papers, authors = rdp.load_data('./data/prl_dblp_5335.json')
+papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
 
 # co authorship matrix formation
 coauth = [[set() for x in range(len(club))] for y in range(len(club))]
@@ -32,7 +32,11 @@ for i in range(len(club)):
         i_paper_ref = papers[k]['references']
         for j in range(len(club)):
             j_papers = authors[club[j]]['papers']
-            ref[i][j].update(set(j_papers).intersection(i_paper_ref))
+            tmp = set()
+            for l in set(j_papers).intersection(i_paper_ref):
+                # i cites j with k->l, author(k)=i, author(l)=j
+                tmp.add((k, l))
+            ref[i][j].update(tmp)
 # output
 print("Citation details :---------------------------------------- ")
 for i in range(len(club)):
