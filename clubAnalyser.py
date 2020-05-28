@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 import rawDataParser as rdp
 
-club = [2608506984, 2163830057, 2106866729, 2639260782, 2299437103, 2079150322, 2110542169, 2593217274, 2907377662]
+# club = [2608506984, 2163830057, 2106866729, 2639260782, 2299437103, 2079150322, 2110542169, 2593217274, 2907377662]
+club = [2609987651, 2122328552, 1972291593, 1572478601, 2038901907, 60139091, 297432538, 168172700, 1980701853]
 print(club)
-papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
+# papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
+papers, authors = rdp.load_data('./data/jmlr/jmlr_dblp.json')
 
 # co authorship matrix formation
 coauth = [[set() for x in range(len(club))] for y in range(len(club))]
