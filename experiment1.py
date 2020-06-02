@@ -30,7 +30,9 @@ if __name__ == '__main__':
     c2 = pickle.load(open("./data/jmlr/communities_co.bin", 'rb'))
     c1 = cd.prepare_output("./data/jmlr/jmlr_dblp.json", c1, True)
     c2 = cd.prepare_output("NA", c2, False)
+    # getting communities
     cd.write_communities(c1, "./data/jmlr/communities_cit.txt")
     cd.write_communities(c2, "./data/jmlr/communities_co.txt")
+    # getting clubs
     c = cd.community_intersection(c1, c2)
     cd.write_clubs(c, './data/jmlr/clubs.txt')
