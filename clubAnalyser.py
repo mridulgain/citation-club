@@ -1,11 +1,11 @@
-#!/usr/bin/python3
+117#!/usr/bin/python3
 import rawDataParser as rdp
 
-# club = [2608506984, 2163830057, 2106866729, 2639260782, 2299437103, 2079150322, 2110542169, 2593217274, 2907377662]
-club = [2609987651, 2122328552, 1972291593, 1572478601, 2038901907, 60139091, 297432538, 168172700, 1980701853]
+club = [2106866729, 2163830057, 2639260782, 2299437103, 2079150322, 2110542169, 2593217274]
+#club = [2609987651, 2122328552, 1972291593, 1572478601, 2038901907, 60139091, 297432538, 168172700, 1980701853]
 print(club)
-# papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
-papers, authors = rdp.load_data('./data/jmlr/jmlr_dblp.json')
+papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
+#papers, authors = rdp.load_data('./data/jmlr/jmlr_dblp.json')
 
 # co authorship matrix formation
 coauth = [[set() for x in range(len(club))] for y in range(len(club))]
@@ -50,7 +50,7 @@ for i in range(len(club)):
     for j in range(len(club)):
         print(len(ref[i][j]), end=" | ")
     print("\n")
-# total citation from journal
+# total citation from journal = sum(len(cited_by) for all his papers)
 n_cit = [0] * len(club)
 for i in range(len(club)):
     i_papers = authors[club[i]]['papers']
@@ -59,11 +59,13 @@ for i in range(len(club)):
 print("Total citation from journal:---------------------------------")
 for x in zip(club, n_cit):
     print(x)
-# totatl citation from club
-n_cit_club = [0] * len(club)
+# totatl citation from club = len( row wise union of ref matrix )
+n_cit_club = [None] * len(club)
 for i in range(len(club)):
+    tmp = set()
     for j in range(len(club)):
-        n_cit_club[i] += len(ref[j][i])
+        tmp.update(ref[j][i])
+    n_cit_club[i] = tmp
 print("Totalo citation from club:-----------------------------------")
-for x in zip(club, n_cit_club):
-    print(x)
+for ix, x in enumerate(club):
+    print(x, len(n_cit_club[ix]))
