@@ -1,19 +1,14 @@
-117#!/usr/bin/python3
+#!/usr/bin/python3
 import rawDataParser as rdp
 
-club = [2106866729, 2163830057, 2639260782, 2299437103, 2079150322, 2110542169, 2593217274]
-#club = [2609987651, 2122328552, 1972291593, 1572478601, 2038901907, 60139091, 297432538, 168172700, 1980701853]
+club = [2064393185, 2120199875, 2078454212, 2150454853, 2309141562, 76530380, 1969841055, 2195679122, 2146387448, 1954235802, 2258767774, 2165532159]
+#club = [1977649925, 2468960519, 1972291593, 1572478601, 2048266507, 2171367185, 2038901907, 2042048789, 2158987803, 168172700, 1980701853, 2086114595, 2099091510, 2279633593, 2150887997, 2609987651, 2093953614, 60139091, 2330451, 2113868374, 2122791383, 297432538, 670306551, 2148448995, 2122328552, 289005672, 167589996, 2285762679, 2584127737, 251023228, 2107302653, 2296948990]
 print(club)
 papers, authors = rdp.load_data('./data/prl/prl_dblp.json')
 #papers, authors = rdp.load_data('./data/jmlr/jmlr_dblp.json')
 
 # co authorship matrix formation
-coauth = [[set() for x in range(len(club))] for y in range(len(club))]
-for i in range(len(club)):
-    for j in range(i, len(club)):
-        paper_i = authors[club[i]]['papers']
-        paper_j = authors[club[j]]['papers']
-        coauth[j][i] = coauth[i][j] = set(paper_i).intersection(paper_j)
+coauth = rdp.get_collab(club, './data/prl/prl_dblp.json')
 # output
 print("Coauthorship count-------------------------------------------")
 for i in range(len(club)):
@@ -69,3 +64,13 @@ for i in range(len(club)):
 print("Totalo citation from club:-----------------------------------")
 for ix, x in enumerate(club):
     print(x, len(n_cit_club[ix]))
+########################################################
+'''import networkx as nx
+G = nx.Graph()
+for i in range(len(club)):
+    for j in range(len(club)):
+        if len(coauth[i][j]) > 1:
+            G.add_edge(i,j)
+import matplotlib.pyplot as plt
+nx.draw( G )
+plt.show()'''

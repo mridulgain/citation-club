@@ -74,10 +74,38 @@ def load_data(fin="./data/prl/prl_dblp.json"):
                 'venue', 'authors', 'references', 'year', 'doi', 'page_start',
                 'issue', 'n_citation', 'publisher', 'title', 'doc_type',
                 'indexed_abstract'
+    returns : papers, authors
     '''
     data = read_json(fin)
     return get_papers(data), get_authors(data)
 
+
+def get_collab(club: list, fin: str) -> list:
+    '''
+        input:
+            club: list of authors
+            fin: dblp aminer json
+        output:
+            collaboration matrix, where matrix(i, j) = no of collab between i & j
+    '''
+    papers, authors = load_data(fin)
+    coauth = [[set() for x in range(len(club))] for y in range(len(club))]
+    for i in range(len(club)):
+        for j in range(i, len(club)):
+            paper_i = authors[club[i]]['papers']
+            paper_j = authors[club[j]]['papers']
+            coauth[j][i] = coauth[i][j] = set(paper_i).intersection(paper_j)
+    return coauth
+
+
+def get_projection(club: list, fin: str) -> list:
+    '''
+        input:
+            club: list of authors
+            fin: dblp aminer json
+        output:
+            collaboration matrix, where matrix(i, j) = no of collab between i & j
+    '''
 
 if __name__ == '__main__':
     print('run the clubAnalyser.py or experiment*.py files')
