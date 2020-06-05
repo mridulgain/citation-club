@@ -104,7 +104,8 @@ def get_projection(club: list, fin: str) -> list:
             club: list of authors
             fin: dblp aminer json
         output:
-            collaboration matrix, where matrix(i, j) = no of collab between i & j
+            projection matrix, 
+            where matrix(i, j) = how many times i cites j
     '''
 
 if __name__ == '__main__':
