@@ -104,9 +104,25 @@ def get_projection(club: list, fin: str) -> list:
             club: list of authors
             fin: dblp aminer json
         output:
-            projection matrix, 
-            where matrix(i, j) = how many times i cites j
+            projection matrix where,
+            each element matrix(i, j): set of citations(a, b) from i to j
+            a, b are authored by i & j respectively
     '''
+    papers, authors = load_data(fin)
+    ref = [[set() for x in range(len(club))] for y in range(len(club))]
+    for i in range(len(club)):
+        i_papers = authors[club[i]]['papers']
+        for k in i_papers:
+            i_paper_ref = papers[k]['references']
+            for j in range(len(club)):
+                j_papers = authors[club[j]]['papers']
+                tmp = set()
+                for l in set(j_papers).intersection(i_paper_ref):
+                    # i cites j with k->l, author(k)=i, author(l)=j
+                    tmp.add((k, l))
+                ref[i][j].update(tmp)
+    return ref
+
 
 if __name__ == '__main__':
     print('run the clubAnalyser.py or experiment*.py files')
