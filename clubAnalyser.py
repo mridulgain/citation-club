@@ -9,6 +9,7 @@
 import rawDataParser as rdp
 from graphviz import Digraph
 from igraph import Graph
+import random
 
 
 class Analysis:
@@ -99,23 +100,55 @@ class Analysis:
         coauth = self.collab
         ref = self.projection
         club = self.members
+        scc = self.compute_scc()
+        # color = ['green', 'blue', 'gold', 'cyan', 'orange', 'magenta']
+        color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
         g = Digraph(comment="induced sub graph", format=format, engine=engine)
-        for i in club:
-            g.node(str(i))
-        with g.subgraph(name='coauth') as c:
+        for i, x in enumerate(club):
+            g.node(str(x), color=color[scc.membership[i]])
+        # uncomment to show collab links
+        """ with g.subgraph(name='coauth') as c:
             c.attr('edge', dir='none', color='red')
             for i in range(len(club)):
                 for j in range(i, len(club)):
                     if i != j and len(coauth[i][j]) > 0:
-                        c.edge(str(club[i]), str(club[j]), label=str(len(coauth[i][j])))
+                        c.edge(str(club[i]), str(club[j]), label=str(len(coauth[i][j]))) """
         with g.subgraph(name='cit') as c:
             for i in range(len(club)):
                 for j in range(len(club)):
                     if len(ref[i][j]) > 0:
                         c.edge(str(club[i]), str(club[j]), label=str(len(ref[i][j])))
         g.render(fout, view=True)
+    
+    def masked_visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
+        coauth = self.collab
+        ref = self.projection
+        club = self.members
+        scc = self.compute_scc()
+        # color = ['green', 'blue', 'gold', 'cyan', 'orange', 'magenta']
+        color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
+        g = Digraph(comment="induced sub graph", format=format, engine=engine)
+        for i, x in enumerate(club):
+            g.node("A"+str(i), color=color[scc.membership[i]])
+        # uncomment to show collab links
+        """ with g.subgraph(name='coauth') as c:
+            c.attr('edge', dir='none', color='red')
+            for i in range(len(club)):
+                for j in range(i, len(club)):
+                    if i != j and len(coauth[i][j]) > 0:
+                        c.edge(str(club[i]), str(club[j]), label=str(len(coauth[i][j]))) """
+        with g.subgraph(name='cit') as c:
+            for i in range(len(club)):
+                for j in range(len(club)):
+                    if len(ref[i][j]) > 0:
+                        c.edge("A"+str(i), "A"+str(j), label=str(len(ref[i][j])))
+        g.render(fout, view=True)
 
-    def strongly_connected_components(self) -> list:
+    def compute_scc(self):
+        '''
+            strongly connected components of given club
+            returns: vertexClusteringObject
+        '''
         club = self.members
         ref = self.projection
         g = Graph(directed=True)
@@ -125,14 +158,29 @@ class Analysis:
             for j in range(len(club)):
                 if len(ref[i][j]) > 0:
                     g.add_edge(i, j, weights=len(ref[i][j]))
-        print("total weight", sum(g.es['weights']))
-        scc = g.components(mode='STRONG').subgraphs()
-        for ix, c in enumerate(scc):
-            score = sum(c.es['weights'])
+        scc = g.components(mode='STRONG')
+        return scc
+
+    def get_scc(self):
+        '''
+            returns:
+                scc: as list of member vertices
+                normalised score: for each scc
+        '''
+        scc = self.compute_scc()
+        try:
+            total_weight = sum(scc.graph.es['weights'])
+        except KeyError:
+            print("No citation edge exists")
+        comp = []
+        score = []
+        for g in scc.subgraphs():
             tmp = []
-            for v in c.vs:
+            for v in g.vs:
                 tmp.append(v['name'])
-            print(tmp, "score ", score)
+            comp.append(tmp)
+            score.append(sum(g.es['weights'])/total_weight)
+        return comp, score
 
 
 if __name__ == '__main__':
