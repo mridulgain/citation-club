@@ -112,7 +112,7 @@ class Analysis:
             for i in range(len(club)):
                 for j in range(len(club)):
                     if len(ref[i][j]) > 0:
-                        g.edge(str(club[i]), str(club[j]), label=str(len(ref[i][j])))
+                        c.edge(str(club[i]), str(club[j]), label=str(len(ref[i][j])))
         g.render(fout, view=True)
 
     def strongly_connected_components(self) -> list:
