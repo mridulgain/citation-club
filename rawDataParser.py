@@ -80,5 +80,66 @@ def load_data(fin="./data/prl/prl_dblp.json"):
     return get_papers(data), get_authors(data)
 
 
+def get_el(fin="./data/prl/prl_dblp.json", el_cit="./data/prl/el_cit.txt", el_co="./data/prl/el_co.txt"):
+    '''
+    create graph in edge list format from dblp json file
+    input: 
+        fin: dblp file name
+        el_cit: file name for citation graph in edgelist format
+        el_co: file name for co-authorship graph in el format
+    output:
+        two edgelist files
+            
+    '''
+    papers, _ = load_data(fin)
+    # citation network
+    with open(el_cit, 'w') as f:
+        for v in papers:
+            for u in papers[v]['cited_by']:
+                f.write("{} {}\n".format(u,v))
+    with open(el_co, 'w') as f:
+        for p in papers:
+            author_count = len(papers[p]['authors'])
+            for i in range(author_count):
+                for j in range(i+1, author_count):
+                    f.write("{} {}\n".format(papers[p]['authors'][i]['id'], papers[p]['authors'][j]['id']))
+
+
+def get_el(fin="./data/prl/prl_dblp.json", el_cit="./data/prl/el_cit.txt", el_co="./data/prl/el_co.txt"):
+    '''
+    create graph in edge list format from dblp json file
+    input: 
+        fin: dblp file name
+        el_cit: file name for citation graph in edgelist format
+        el_co: file name for co-authorship graph in el format
+    output:
+        two edgelist files
+            
+    '''
+    papers, _ = load_data(fin)
+    # citation network
+    with open(el_cit, 'w') as f:
+        for v in papers:
+            for u in papers[v]['cited_by']:
+                f.write("{} {}\n".format(u,v))
+                
+    # co-auth net
+    co_auth_freq = {} # how many papers two authors have published togather
+    for p in papers:
+        author_count = len(papers[p]['authors'])
+        #print(p)
+        for i in range(author_count):
+            for j in range(i+1, author_count):
+                #print(papers[p]['authors'][i]['id'], papers[p]['authors'][j]['id'])
+                key = frozenset([papers[p]['authors'][i]['id'], papers[p]['authors'][j]['id']])
+                co_auth_freq.setdefault(key, 0)
+                co_auth_freq[key] += 1
+        with open(el_co, 'w') as f:
+    	    for k in co_auth_freq:
+    	        edge = list(k)
+    	        weight = co_auth_freq[k]
+    	        f.write("{} {} {}\n".format(edge[0], edge[1], weight))
+    
+    
 if __name__ == '__main__':
     print('run the clubAnalyser.py or experiment*.py files')
