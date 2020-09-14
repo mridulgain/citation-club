@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''
     same as experiment1
-    except taking whole graph instead of gcc for co-authorship network
+    taking whole graph instead of gcc for co-authorship network
 '''
 import pickle
 import clubDetector as cd
