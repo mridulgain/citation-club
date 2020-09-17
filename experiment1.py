@@ -18,7 +18,7 @@ def getCommunities(fnam, directed):
         pickle.dump(communities, open("./data/jmlr/communities_cit.bin", 'wb'))
     else:
         pickle.dump(communities, open("./data/jmlr/communities_co.bin", 'wb'))
-    return cd.prepare_output("./data/jmlr/jmlr_dblp_2372.json", communities, directed)
+    return cd.prepare_output("./data/jmlr/jmlr_dblp.json", communities, directed)
 
 
 if __name__ == '__main__':
