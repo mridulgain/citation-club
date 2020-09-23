@@ -7,7 +7,7 @@ fin = './data/prl/prl_dblp.json'
 print(club)
 ca = Analysis(club, fin)
 ############################################################# collab
-coauth = ca.get_collab()
+coauth = ca.get_coauth_matrix()
 print("Coauthorship count-------------------------------------------")
 for i in range(len(club)):
     for j in range(len(club)):
@@ -20,7 +20,7 @@ for i in range(len(club)):
     print("\n")
 
 ###################################################### projection
-ref = ca.get_projection()
+ref = ca. get_reference_matrix()
 # output
 print("Citation details :---------------------------------------- ")
 for i in range(len(club)):
