@@ -7,7 +7,7 @@ fin = './data/jmlr/jmlr_dblp.json'
 print(club)
 ca = Analysis(club, fin)
 
-#####################################graph drawing#############################################'''
+#####################################graph drawing###############################################
 ca.visualise("results/induced_subg.gv", engine='circo')
 ##########################strongly connected components for induced subg#########################
 comp, score = ca.get_scc()
