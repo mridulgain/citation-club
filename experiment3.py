@@ -2,11 +2,18 @@
 '''
     same as experiment1
     taking whole graph instead of gcc for co-authorship network
+    usage: ./experiment3.py [jmlr|prl]
 '''
 import pickle
 import clubDetector as cd
+import sys
 
-journal = "jmlr"
+try:
+    journal = sys.argv[1]
+except IndexError:
+    #journal = "prl"
+    print("usage: python3 experiment3.py [jmlr|prl]")
+    exit(0)
 
 def getCommunities(fnam, directed):
     g = cd.input_edgelist(fnam, directed)
@@ -39,12 +46,14 @@ def filter(comm)->list:
         return comm
 
 if __name__ == '__main__':
-    '''# getting communities
+    # getting communities
+    '''
     c1 = getCommunities("./data/"+journal+"/el_cit", True)
     c2 = getCommunities("./data/"+journal+"/el_co", False)
     # getting clubs
     cd.write_communities(c1, "./results/experiment3/"+journal+".communities_cit.txt")
-    cd.write_communities(c2, "./results/experiment3/"+journal+".communities_co.txt")'''
+    cd.write_communities(c2, "./results/experiment3/"+journal+".communities_co.txt")
+    '''
     c1 = getCommunitiesFromFiles("./results/experiment3/"+journal+".communities_cit.bin", True)
     c2 = getCommunitiesFromFiles("./results/experiment3/"+journal+".communities_co.bin", False)
     print("before pruning", len(c1), len(c2))
@@ -54,4 +63,4 @@ if __name__ == '__main__':
     c = cd.community_intersection(c1, c2)
     #print(c)
     print(len(c))
-    cd.write_clubs(c, './results/experiment3/'+journal+'.clubs.txt')
+    cd.write_clubs(c, "./results/experiment3/"+journal+".clubs.txt")

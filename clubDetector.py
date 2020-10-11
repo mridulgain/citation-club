@@ -102,6 +102,33 @@ def write_clubs(c: list, fout: str) -> None:
     f.close()
 
 
+def col_wise_union(number, path = 'results/experiment3/prl.clubs.txt'):
+    values = []
+    new_list = []
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.replace("(", "").replace(")", "").replace("{","").replace("}", "")
+            # print(line)
+            new_line = []
+            new_line.extend(line.rstrip().split(". "))
+            # print(new_line)
+            temp = []
+            for y in new_line:
+                temp.extend([int(x) for x in y.split(",")])
+            new_list.append(temp)
+            # print(new_list)
+            # break
+    for ele in new_list:
+        if ele[1] == number:
+            values.extend(ele[2:])
+    return(set(values))
+
+def write_clusters(c: list, fout: str) -> None:
+    f = open(fout, 'w')
+    for i in range(len(c)):
+        if len(c[i]) != 0:
+            f.write("(*,{}). {}\n".format(i+1, c[i]))
+    f.close()
 if __name__ == '__main__':
     print("Not to be executed directly")
     print("Run the experiment files instead")
