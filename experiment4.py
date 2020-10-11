@@ -31,7 +31,7 @@ if __name__ == '__main__':
     coauthnet_comm = cd.detect_communities(coauth_gcc, directed = False)
     pickle.dump(citnet_comm,
         open("./results/experiment4/"+journal+".communities_cit.bin", 'wb'))
-    pickle.dump(coauth_comm,
+    pickle.dump(coauthnet_comm,
         open("./results/experiment4/"+journal+".communities_co.bin", 'wb'))
     #
     # alternatively if you already have communities as .bin file, you can
@@ -41,14 +41,14 @@ if __name__ == '__main__':
     '''
     citnet_comm = pickle.load(
         open("./results/experiment4/"+journal+".communities_cit.bin", 'rb'))
-    coauth_comm = pickle.load(
+    coauthnet_comm = pickle.load(
         open("./results/experiment4/"+journal+".communities_co.bin", 'rb'))
     '''
     # 4
     c1 = cd.prepare_output("./data/"+journal+"/"+journal+"_dblp.json",
                                                 citnet_comm, directed = True)
     c2 = cd.prepare_output("./data/"+journal+"/"+journal+"_dblp.json",
-                                                coauth_comm, directed = False)
+                                                coauthnet_comm, directed = False)
     # 5
     tmp = cd.community_intersection(c1, c2)
     cd.write_clubs(tmp, "./results/experiment4/"+journal+".intersection.txt")
