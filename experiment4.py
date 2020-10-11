@@ -28,7 +28,7 @@ if __name__ == '__main__':
     coauthnet_gcc = cd.getLargestConnectedComponent(coauthnet)
     # 3
     citnet_comm = cd.detect_communities(citnet_gcc, directed = True)
-    coauthnet_comm = cd.detect_communities(coauth_gcc, directed = False)
+    coauthnet_comm = cd.detect_communities(coauthnet_gcc, directed = False)
     pickle.dump(citnet_comm,
         open("./results/experiment4/"+journal+".communities_cit.bin", 'wb'))
     pickle.dump(coauthnet_comm,
