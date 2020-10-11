@@ -1,7 +1,7 @@
 ## pass coauthorship community number as command line argument
 def get_list(number):
     values = []
-    path = '../../club/results/experiment3/prl.clubs.txt'
+    path = '/home/nandini/Downloads/prl.clubs.txt'
     new_list = []
     with open(path) as f:
         for line in f.readlines():
@@ -22,8 +22,8 @@ def get_list(number):
     return(values)
 
 import sys
-i = int(sys.argv[1])
-x = get_list(i)
-s = set(x)
-print(s)
-# print(len(s))
+# i = int(sys.argv[1])
+for i in range(1500):
+    x = get_list(i)
+    s = set(x)
+    print(i, s, len(s))
