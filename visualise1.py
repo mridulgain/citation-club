@@ -10,7 +10,6 @@ ca = Analysis(club, fin)
 #####################################graph drawing###############################################
 ca.visualise("results/induced_subg.gv", engine='circo')
 ##########################strongly connected components for induced subg#########################
-comp, score = ca.get_scc()
-for i in range(len(comp)):
-    print(comp[i], score[i])
-print("Club score: ", sum(score))
+sccs = ca.get_scc()
+for i in sccs:
+    print(i.members, i.weight)
