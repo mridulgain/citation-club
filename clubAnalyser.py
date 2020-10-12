@@ -22,6 +22,7 @@ class Analysis:
         self.collab = self.get_coauth_matrix()
         self.projection = self.get_reference_matrix()
 
+
     def get_coauth_matrix(self) -> list:
         '''
             input:
@@ -39,6 +40,7 @@ class Analysis:
                 coauth[i][j] = set(paper_i).intersection(paper_j)
                 coauth[j][i] = coauth[i][j]
         return coauth
+
 
     def get_reference_matrix(self) -> list:
         '''
@@ -64,6 +66,7 @@ class Analysis:
                     ref[i][j].update(tmp)
         return ref
 
+
     def count_journal_cit(self) -> list:
         '''
             input: list of authors
@@ -78,6 +81,7 @@ class Analysis:
             for p in i_papers:
                 count[i] += len(self.papers[p]['cited_by'])
         return count
+
 
     def get_club_cit(self) -> list:
         '''
@@ -96,8 +100,9 @@ class Analysis:
             cit[i] = tmp
         return cit
 
+
     def visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
-        coauth = self.collab
+        #coauth = self.collab
         ref = self.projection
         club = self.members
         scc = self.compute_scc()
@@ -120,15 +125,16 @@ class Analysis:
                         c.edge(str(club[i]), str(club[j]), label=str(len(ref[i][j])))
         g.render(fout, view=True)
     
+
     def masked_visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
-        coauth = self.collab
+        #coauth = self.collab
         ref = self.projection
         club = self.members
         scc = self.compute_scc()
         # color = ['green', 'blue', 'gold', 'cyan', 'orange', 'magenta']
         color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
         g = Digraph(comment="induced sub graph", format=format, engine=engine)
-        for i, x in enumerate(club):
+        for i, _ in enumerate(club):
             g.node("A"+str(i), color=color[scc.membership[i]])
         # uncomment to show collab links
         """ with g.subgraph(name='coauth') as c:
@@ -143,6 +149,7 @@ class Analysis:
                     if len(ref[i][j]) > 0:
                         c.edge("A"+str(i), "A"+str(j), label=str(len(ref[i][j])))
         g.render(fout, view=True)
+
 
     def compute_scc(self):
         '''
@@ -161,27 +168,33 @@ class Analysis:
         scc = g.components(mode='STRONG')
         return scc
 
-    def get_scc(self):
+
+    def get_scc(self):#compute_score()
         '''
-            returns:
-                scc: as list of member vertices
-                normalised score: for each scc
+            returns: list of scc objects of
+                        given set of authors
         '''
         scc = self.compute_scc()
+        res = []
         try:
             total_weight = sum(scc.graph.es['weights'])
+            for g in scc.subgraphs():
+                obj = Scc()
+                for v in g.vs:
+                    obj.members.append(v['name'])
+                obj.weight = sum(g.es['weights']) / total_weight
+                res.append(obj)
         except KeyError:
-            print("No citation edge exists")
-        comp = []
-        score = []
-        for g in scc.subgraphs():
-            tmp = []
-            for v in g.vs:
-                tmp.append(v['name'])
-            comp.append(tmp)
-            score.append(sum(g.es['weights'])/total_weight)
-        return comp, score
+            # No citation edge exists among them
+            pass
+        return res
 
 
+class Scc:
+    def __init__(self):
+        self.members = []
+        self.weight = 0
+ 
+    
 if __name__ == '__main__':
     print("Run analysis.py or visualise.py")
