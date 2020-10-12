@@ -58,7 +58,7 @@ def prepare_output(fmap: str, vc: VertexClustering, directed=True) -> list:
     res = []
     if directed:
         # map papers to author
-        papers, authors = rdp.load_data(fmap)
+        papers, _ = rdp.load_data(fmap)
         for g in com:
             tmp = set()
             for v in g.vs:
@@ -123,12 +123,15 @@ def col_wise_union(number, path = 'results/experiment3/prl.clubs.txt'):
             values.extend(ele[2:])
     return(set(values))
 
+
 def write_clusters(c: list, fout: str) -> None:
     f = open(fout, 'w')
     for i in range(len(c)):
         if len(c[i]) != 0:
             f.write("(*,{}). {}\n".format(i+1, c[i]))
     f.close()
+
+
 if __name__ == '__main__':
     print("Not to be executed directly")
     print("Run the experiment files instead")
