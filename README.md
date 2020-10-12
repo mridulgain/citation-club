@@ -1,6 +1,7 @@
 # citation-club
 Install dependencies,
 ```
-pip install -r dependency.txt
+ sudo apt install graphviz
+ pip install -r dependency.txt
 ```
 
