@@ -20,7 +20,7 @@ for i in range(len(club)):
     print("\n")
 
 ###################################################### projection
-ref = ca. get_reference_matrix()
+ref = ca.get_reference_matrix()
 # output
 print("Citation details :---------------------------------------- ")
 for i in range(len(club)):
