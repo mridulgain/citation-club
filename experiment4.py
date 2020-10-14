@@ -46,29 +46,31 @@ if __name__ == '__main__':
     # comment out step 1 to 3 and uncomment the following part for speeding up
     # the execution
     #
-    
+
     citnet_comm = pickle.load(
         open("./results/experiment4/"+journal+".communities_cit.bin", 'rb'))
     coauthnet_comm = pickle.load(
         open("./results/experiment4/"+journal+".communities_co.bin", 'rb'))
-    
+
     # 4
     print('mapping papers to authors..')
     cit_comm = cd.prepare_output("./data/"+journal+"/"+journal+"_dblp.json",
                                                 citnet_comm, directed = True)
     coauth_comm = cd.prepare_output("./data/"+journal+"/"+journal+"_dblp.json",
-                                                coauthnet_comm, directed = False)
+                                            coauthnet_comm, directed = False)
     # 5
     print('intersecting communities..')
     intersections = cd.community_intersection(cit_comm, coauth_comm)
-    cd.write_clubs(intersections, "./results/experiment4/"+journal+".intersection.txt")
+    cd.write_clubs(intersections,
+                    "./results/experiment4/"+journal+".intersection.txt")
     # 6
     print('col wise union...')
     clusters = []
     for i in range(len(coauth_comm)):
-        tmp = cd.col_wise_union(i, 'results/experiment4/'+ journal + '.intersection.txt')
+        tmp = cd.col_wise_union(i,
+                    'results/experiment4/'+ journal + '.intersection.txt')
         clusters.append(tmp)
-    cd.write_clusters(clusters, './results/experiment4/'+journal+'.union.txt')
+    cd.write_clusters(clusters, './results/experiment4/'+ journal +'.union.txt')
     # 7
     print('computing scc..')
     db = './data/'+ journal + '/' + journal +'_dblp.json'
@@ -82,6 +84,8 @@ if __name__ == '__main__':
     for tmp in sccs:
         for scc in tmp:
             if scc.weight != 0:
-                f.write("{} ~ {} ~ {}\n".format(scc.members, len(scc.members), scc.weight))
+                f.write(
+                    "{} ~ {} ~ {}\n".format(
+                                    scc.members,len(scc.members),scc.weight))
         #f.write('\n')
     f.close()
