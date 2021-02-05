@@ -50,17 +50,17 @@ if __name__ == '__main__':
     '''
     c1 = getCommunities("./data/"+journal+"/el_cit", True)
     c2 = getCommunities("./data/"+journal+"/el_co", False)
-    # getting clubs
-    cd.write_communities(c1, "./results/experiment3/"+journal+".communities_cit.txt")
-    cd.write_communities(c2, "./results/experiment3/"+journal+".communities_co.txt")
     '''
     c1 = getCommunitiesFromFiles("./results/experiment3/"+journal+".communities_cit.bin", True)
     c2 = getCommunitiesFromFiles("./results/experiment3/"+journal+".communities_co.bin", False)
-    print("before pruning", len(c1), len(c2))
-    c1 = filter(c1)
-    c2 = filter(c2)
-    print("after pruning", len(c1), len(c2))
+    
+    #print("before pruning", len(c1), len(c2))
+    #c1 = filter(c1)
+    #c2 = filter(c2)
+    #print("after pruning", len(c1), len(c2))
+    # store communities as list
+    cd.write_communities(c1, "./results/experiment3/"+journal+".communities_cit.txt")
+    cd.write_communities(c2, "./results/experiment3/"+journal+".communities_co.txt")
     c = cd.community_intersection(c1, c2)
-    #print(c)
-    print(len(c))
+
     cd.write_clubs(c, "./results/experiment3/"+journal+".clubs.txt")
