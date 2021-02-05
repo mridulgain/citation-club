@@ -3,6 +3,7 @@
     All reusable pieces of codes in one file..
     ... cause I messed up with the design.
 '''
+import pickle
 import rawDataParser as rdp
 from igraph import Graph
 from igraph import VertexClustering
@@ -97,9 +98,18 @@ def write_clubs(c: list, fout: str) -> None:
     f = open(fout, 'w')
     for i in range(len(c)):
         for j in range(len(c[i])):
-            if len(c[i][j]) != 0:
+            if c[i][j] is not None and len(c[i][j]) > 1:
                 f.write("({},{}). {}\n".format(i+1, j+1, c[i][j]))
     f.close()
+
+
+def write_clubs_bin(c: list, fout: str) -> None:
+    pccs = []
+    for i in range(len(c)):
+        for j in range(len(c[i])):
+            if c[i][j] is not None and len(c[i][j]) > 1:
+                pccs.append(c[i][j])
+    pickle.dump(pccs, open(fout, 'wb'))
 
 
 def col_wise_union(number, path = 'results/experiment3/prl.clubs.txt'):
