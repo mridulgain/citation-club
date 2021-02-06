@@ -195,6 +195,13 @@ class Scc:
         self.members = []
         self.weight = 0
  
-    
+
+class Pcc:
+    def __init__(self, pcc: list, scc: Scc, strength: float):
+        self.pcc = pcc
+        self.scc = scc
+        self.strength = strength
+
+
 if __name__ == '__main__':
     print("Run analysis.py or visualise.py")
