@@ -45,7 +45,7 @@ def detect_communities(G: Graph, directed=True) -> VertexClustering:
     return communities
 
 
-def prepare_output(fmap: str, vc: VertexClustering, directed=True) -> list:
+def list_repr_communities(fmap: str, vc: VertexClustering, directed=True) -> list:
     '''
         input:  dblp json file for paper->author mapping
                 vertexClustering Obj
@@ -87,6 +87,12 @@ def write_communities(c: list, fout: str) -> None:
 
 
 def community_intersection(c1: list, c2: list) -> list:
+    '''
+        input: two communities
+                (generally co-authorship ans citation)
+        output: 2d matrix containing 
+                intersection of two communities
+    '''
     res = [[None for x in c2] for y in c1]
     for i in range(len(c1)):
         for j in range(len(c2)):
@@ -95,6 +101,9 @@ def community_intersection(c1: list, c2: list) -> list:
 
 
 def write_clubs(c: list, fout: str) -> None:
+    '''
+        this method should not be here
+    '''
     f = open(fout, 'w')
     for i in range(len(c)):
         for j in range(len(c[i])):
@@ -103,35 +112,34 @@ def write_clubs(c: list, fout: str) -> None:
     f.close()
 
 
-def write_clubs_bin(c: list, fout: str) -> None:
-    pccs = []
+def list_repr_clubs(c: list) -> list:
+    '''
+        input: 
+        output:
+    '''
+    clubs = []
     for i in range(len(c)):
         for j in range(len(c[i])):
             if c[i][j] is not None and len(c[i][j]) > 1:
-                pccs.append(c[i][j])
-    pickle.dump(pccs, open(fout, 'wb'))
+                clubs.append(c[i][j])
+    return clubs
 
 
-def col_wise_union(number, path = 'results/experiment3/prl.clubs.txt'):
-    values = []
-    new_list = []
-    with open(path) as f:
-        for line in f.readlines():
-            line = line.replace("(", "").replace(")", "").replace("{","").replace("}", "")
-            # print(line)
-            new_line = []
-            new_line.extend(line.rstrip().split(". "))
-            # print(new_line)
-            temp = []
-            for y in new_line:
-                temp.extend([int(x) for x in y.split(",")])
-            new_list.append(temp)
-            # print(new_list)
-            # break
-    for ele in new_list:
-        if ele[1] == number:
-            values.extend(ele[2:])
-    return(set(values))
+def col_wise_union(matrix: list)-> list:
+    '''
+        input: result of col wise intersection
+                of 2 communities
+        output: list of pccs 
+    '''
+    rows = len(matrix)
+    cols = len(matrix[0])
+    pccs = []
+    for i in range(cols):
+        tmp = set()
+        for j in range(rows):
+            tmp.update(matrix[j][i])
+        pccs.append(tmp)
+    return pccs
 
 
 def write_clusters(c: list, fout: str) -> None:
