@@ -18,7 +18,7 @@ from clubAnalyser import Analysis
 try:
     journal = sys.argv[1]
 except IndexError:
-    print("usage: python3 experiment4.py [jmlr|prl]")
+    print("usage: python3", sys.argv[0], "[jmlr|prl]")
     exit(0)
 
 

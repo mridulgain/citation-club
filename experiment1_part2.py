@@ -7,7 +7,7 @@ try:
     journal = sys.argv[1]
 except IndexError:
     #journal = "prl"
-    print("usage: python3 experiment3.py [jmlr|prl]")
+    print("usage: python3", sys.argv[0], "[jmlr|prl]")
     exit(0)
 
 db = "./data/" + journal + "/" + journal + "_dblp.json"

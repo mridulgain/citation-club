@@ -7,7 +7,7 @@ try:
     journal = sys.argv[1]
 except IndexError:
     #journal = "prl"
-    print("usage: python3 club_freq_distrib.py [jmlr|prl]")
+    print("usage: python3", sys.argv[0], "[jmlr|prl]")
     exit(0)
 
 pccs = pickle.load(open("./results/experiment1/" + journal + ".pcc_details.bin", 'rb'))
