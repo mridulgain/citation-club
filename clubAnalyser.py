@@ -109,7 +109,7 @@ class Analysis:
         return self_cit
 
 
-    def visualise(self, fout="tmp.gv", engine='dot', format='png') -> None:
+    def visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
         #coauth = self.collab
         ref = self.projection
         club = self.members
