@@ -134,7 +134,7 @@ class Analysis:
         g.render(fout, view=True)
     
 
-    def masked_visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
+    def masked_visualise(self, fout="tmp", engine='dot', format='pdf') -> None:
         #coauth = self.collab
         ref = self.projection
         coauth = self.collab
@@ -142,23 +142,28 @@ class Analysis:
         scc = self.compute_scc()
         prefix = "auth"
         # color = ['green', 'blue', 'gold', 'cyan', 'orange', 'magenta']
-        #color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
+        color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
         g = Digraph(comment="induced sub graph", format=format, engine=engine)
         for i, _ in enumerate(club):
-            g.node(prefix+str(i))
+            g.node(prefix+str(i), color=color[scc.membership[i]])
         # uncomment to show collab links
-        with g.subgraph(name='coauth') as c:
+        with g.subgraph(name='cit') as c:
+            for i in range(len(club)):
+                for j in range(len(club)):
+                    if len(ref[i][j]) > 0:
+                        c.edge(prefix+str(i), prefix+str(j), label=str(len(ref[i][j])))
+        g.render(fout+".cit.gv", view=True)
+        g1 = Digraph(comment="induced sub graph", format=format, engine=engine)
+        for i, _ in enumerate(club):
+            g1.node(prefix+str(i), color=color[scc.membership[i]])
+        # uncomment to show collab links
+        with g1.subgraph(name='coauth') as c:
             c.attr('edge', dir='none')
             for i in range(len(club)):
                 for j in range(i, len(club)):
                     if i != j and len(coauth[i][j]) > 0:
                         c.edge(prefix+str(i), prefix+str(j), label=str(len(coauth[i][j])))
-        """ with g.subgraph(name='cit') as c:
-            for i in range(len(club)):
-                for j in range(len(club)):
-                    if len(ref[i][j]) > 0:
-                        c.edge(prefix+str(i), prefix+str(j), label=str(len(ref[i][j]))) """
-        g.render(fout, view=True)
+        g1.render(fout+".coauth.gv", view=True)
 
 
     def compute_scc(self):
