@@ -69,8 +69,7 @@ class Analysis:
 
     def count_journal_cit(self) -> list:
         '''
-            input: list of authors
-            output: respective citation count
+            returns: respective citation count
                 total citation for an author
                     = sum(len(cited_by) for all his papers)
         '''
@@ -85,8 +84,6 @@ class Analysis:
 
     def get_club_cit(self) -> list:
         '''
-            input:
-                club: list of authors
             returns:
                 totatl citation from club =  row wise union of ref matrix )
         '''
@@ -101,7 +98,18 @@ class Analysis:
         return cit
 
 
-    def visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
+    def get_self_cit(self)-> list:
+        '''
+            returns: list of self citations (i,j)
+                    i.e  paper i & j is written by same author
+        '''
+        self_cit = []
+        for i, _ in enumerate(self.members):
+            self_cit.append(self.projection[i][i])
+        return self_cit
+
+
+    def visualise(self, fout="tmp.gv", engine='dot', format='png') -> None:
         #coauth = self.collab
         ref = self.projection
         club = self.members
@@ -129,25 +137,27 @@ class Analysis:
     def masked_visualise(self, fout="tmp.gv", engine='dot', format='pdf') -> None:
         #coauth = self.collab
         ref = self.projection
+        coauth = self.collab
         club = self.members
         scc = self.compute_scc()
+        prefix = "auth"
         # color = ['green', 'blue', 'gold', 'cyan', 'orange', 'magenta']
-        color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
+        #color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
         g = Digraph(comment="induced sub graph", format=format, engine=engine)
         for i, _ in enumerate(club):
-            g.node("A"+str(i), color=color[scc.membership[i]])
+            g.node(prefix+str(i))
         # uncomment to show collab links
-        """ with g.subgraph(name='coauth') as c:
-            c.attr('edge', dir='none', color='red')
+        with g.subgraph(name='coauth') as c:
+            c.attr('edge', dir='none')
             for i in range(len(club)):
                 for j in range(i, len(club)):
                     if i != j and len(coauth[i][j]) > 0:
-                        c.edge(str(club[i]), str(club[j]), label=str(len(coauth[i][j]))) """
-        with g.subgraph(name='cit') as c:
+                        c.edge(prefix+str(i), prefix+str(j), label=str(len(coauth[i][j])))
+        """ with g.subgraph(name='cit') as c:
             for i in range(len(club)):
                 for j in range(len(club)):
                     if len(ref[i][j]) > 0:
-                        c.edge("A"+str(i), "A"+str(j), label=str(len(ref[i][j])))
+                        c.edge(prefix+str(i), prefix+str(j), label=str(len(ref[i][j]))) """
         g.render(fout, view=True)
 
 
