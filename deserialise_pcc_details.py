@@ -1,3 +1,4 @@
+# short pcc details by size or score
 import sys
 import pickle
 try:
@@ -7,9 +8,10 @@ except IndexError:
     print("usage: python3 experiment3.py [jmlr|prl]")
     exit(0)
 clubs = pickle.load(open("./results/experiment1/" + journal + ".pcc_details.bin", 'rb'))
-clubs = sorted(clubs, key = lambda x : len(x[0]))
+# clubs = sorted(clubs, key = lambda x : len(x[0])) # short by size
+# clubs = sorted(clubs, key = lambda x : len(x[0])) # short by STRENGTH
 for c in clubs:
-    print("pcc: ", c[0], " size: ", len(c[0]))
+    print("pcc: ", c[0], " size: ", len(c[0])) 
     print("SCC:")
     for s in c[1]:
         print(s.members, s.weight)
