@@ -8,7 +8,7 @@ print(club)
 ca = Analysis(club, fin)
 
 #####################################graph drawing###############################################
-ca.masked_visualise("results/induced_subg.gv", engine='circo')
+ca.visualise("results/induced_subg.gv", engine='circo')
 ##########################strongly connected components for induced subg#########################
 sccs = ca.get_scc()
 for i in sccs:
