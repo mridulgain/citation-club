@@ -1,4 +1,4 @@
-# member distribution in pccs
+# member & strength distribution in pccs
 import sys
 import pickle
 from collections import Counter
@@ -15,3 +15,8 @@ pccs = pickle.load(open("./results/experiment1/" + journal + ".pcc_details.bin",
 freq = Counter(len(x[0]) for x in pccs)
 for i in freq:
     print(i, freq[i])
+
+scores = [x[2] for x in pccs]
+#print(scores) 
+size = [len(x[0]) for x in pccs]
+print(size)

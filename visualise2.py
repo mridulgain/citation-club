@@ -8,10 +8,9 @@ import pickle
 from clubAnalyser import Analysis
 from mask_author_id import search_author
 
-id = 2144446980
-
 try:
     journal = sys.argv[1]
+    author = int(sys.argv[2])
 except IndexError:
     #journal = "prl"
     print("usage: python3", sys.argv[0], "[jmlr|prl]")
@@ -19,7 +18,10 @@ except IndexError:
 
 pccs = pickle.load(open("./results/experiment1/" + journal + ".pcc_details.bin", 'rb'))
 fin = './data/' + journal + '/' + journal + '_dblp.json'
-pcc_index = search_author(pccs, id)
+pcc_index = search_author(pccs, author)
+if pcc_index == -1:
+    print("pcc not found in given journal")
+    exit(0)
 print("pcc: ", pcc_index+1)
 club = list(pccs[pcc_index][0])
 

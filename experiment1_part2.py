@@ -25,7 +25,7 @@ for c in pccs:
         
     print(len(c), total_strength)
     score.append(total_strength)
-    pcc_scc_score.append([c, sccs, total_strength])
+    pcc_scc_score.append([list(c), sccs, total_strength])
 #print("max strength", max(score))
 #pickle.dump(score, open("./results/experiment1/" + journal + ".score.bin", 'wb'))
 pickle.dump(pcc_scc_score, open("./results/experiment1/" + journal + ".pcc_details.bin", 'wb'))

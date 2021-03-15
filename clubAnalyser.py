@@ -143,27 +143,27 @@ class Analysis:
         prefix = "auth"
         # color = ['green', 'blue', 'gold', 'cyan', 'orange', 'magenta']
         color = ["#"+"".join([random.choice('1234567890ABCDEF') for _ in range(6)]) for _ in club]
+        # author-author citation network
         g = Digraph(comment="induced sub graph", format=format, engine=engine)
         for i, _ in enumerate(club):
-            g.node(prefix+str(i), color=color[scc.membership[i]])
-        # uncomment to show collab links
+            g.node(prefix+str(i+1), color=color[scc.membership[i]], penwidth='2')
         with g.subgraph(name='cit') as c:
             for i in range(len(club)):
                 for j in range(len(club)):
                     if len(ref[i][j]) > 0:
-                        c.edge(prefix+str(i), prefix+str(j), label=str(len(ref[i][j])))
-        g.render(fout+".cit.gv", view=True)
+                        c.edge(prefix+str(i+1), prefix+str(j+1), label=str(len(ref[i][j])))
+        # co-authorship network
         g1 = Digraph(comment="induced sub graph", format=format, engine=engine)
         for i, _ in enumerate(club):
-            g1.node(prefix+str(i), color=color[scc.membership[i]])
-        # uncomment to show collab links
+            g1.node(prefix+str(i+1), penwidth='2')
         with g1.subgraph(name='coauth') as c:
             c.attr('edge', dir='none')
             for i in range(len(club)):
                 for j in range(i, len(club)):
                     if i != j and len(coauth[i][j]) > 0:
-                        c.edge(prefix+str(i), prefix+str(j), label=str(len(coauth[i][j])))
-        g1.render(fout+".coauth.gv", view=True)
+                        c.edge(prefix+str(i+1), prefix+str(j+1), label=str(len(coauth[i][j])))
+        g.render(fout+".cit.gv", view=False)
+        g1.render(fout+".coauth.gv", view=False)
 
 
     def compute_scc(self):
