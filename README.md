@@ -1,6 +1,6 @@
 ## citation-club
 This repo is part of our paper("Detection of Potential Citation Clubs in Bibliographic Networks") accepted in ICDSA 2021.
-Install dependencies,
+# Install dependencies,
 ```
  sudo apt install graphviz
  pip install -r dependency.txt
